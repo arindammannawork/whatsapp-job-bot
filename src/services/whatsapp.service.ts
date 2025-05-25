@@ -61,8 +61,10 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
       console.log(5);
       writer.on("finish", async () => {
         // console.log("✅ Image saved to:", savePath);
+        console.log(6);
         const extractedText = await extractTextFromImage(savePath);
         // console.log("📜 Extracted Text:\n", extractedText);
+        console.log(7);
         const googleAiOutput = await tryGoogleAi(
           extractedText,
           myProfile,
