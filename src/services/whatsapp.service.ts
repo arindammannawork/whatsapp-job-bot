@@ -51,8 +51,8 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
     if (host === "localhost" || host === "127.0.0.1") {
       savePath = path.join(__dirname, "../../uploads", filename);
     } else {
-      // savePath = path.join("/tmp", filename); // ✅ Use /tmp for Vercel
-      savePath = path.join(__dirname, "../../uploads", filename);
+      savePath = path.join("/tmp", filename); // ✅ Use /tmp for Vercel
+      // savePath = path.join(__dirname, "../../uploads", filename);
     }
     console.log(1);
 
