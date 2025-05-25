@@ -46,59 +46,59 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
 
     try {
       console.log(2);
-      const response = await axios.get(mediaUrl, {
-        responseType: "stream",
-        auth: {
-          username: process.env.TWILIO_ACCOUNT_SID!,
-          password: process.env.TWILIO_AUTH_TOKEN!,
-        },
-      });
+      // const response = await axios.get(mediaUrl, {
+      //   responseType: "stream",
+      //   auth: {
+      //     username: process.env.TWILIO_ACCOUNT_SID!,
+      //     password: process.env.TWILIO_AUTH_TOKEN!,
+      //   },
+      // });
       console.log(3);
 
-      const writer = fs.createWriteStream(savePath);
+      // const writer = fs.createWriteStream(savePath);
       console.log(4);
-      response.data.pipe(writer);
+      // response.data.pipe(writer);
       console.log(5);
-      writer.on("finish", async () => {
-        // console.log("✅ Image saved to:", savePath);
-        console.log(6);
-        const extractedText = await extractTextFromImage(savePath);
-        // console.log("📜 Extracted Text:\n", extractedText);
-        console.log(7);
-        const googleAiOutput = await tryGoogleAi(
-          extractedText,
-          myProfile,
-          extraPromt
-        );
-        console.log(6);
-        const subject = extractSubject(googleAiOutput.text);
-        const mailtext = removeSubjectLine(googleAiOutput.text);
+      // writer.on("finish", async () => {
+      // });
+      // console.log("✅ Image saved to:", savePath);
+      console.log(6);
+      const extractedText = await extractTextFromImage(mediaUrl);
+      // console.log("📜 Extracted Text:\n", extractedText);
+      console.log(7);
+      const googleAiOutput = await tryGoogleAi(
+        extractedText,
+        myProfile,
+        extraPromt
+      );
+      console.log(6);
+      const subject = extractSubject(googleAiOutput.text);
+      const mailtext = removeSubjectLine(googleAiOutput.text);
 
-        const emails = extractEmailFromText(`${extractedText}. ${extraPromt}`);
-        console.log("📧 Emails Found:", emails);
+      const emails = extractEmailFromText(`${extractedText}. ${extraPromt}`);
+      console.log("📧 Emails Found:", emails);
 
-        const result = await sendEmail({
-          to: emails,
-          subject: subject as string,
-          text: mailtext as string,
-          attachments: [
-            {
-              filename: "resume.pdf",
-              path: "./src/asset/resume.pdf", // make sure the file exists
-            },
-          ],
-        });
-        console.log(7);
-        console.log(result);
-        const sid = await sendWhatsAppMessage(
-          process.env.MY_WHATSAPP_NUMBER!,
-          `Email sent: ${result.response}`
-        );
-        console.log(sid);
-        console.log(8);
-        // const applicationEmail = await generateEmail(extractedText, myProfile);
-        // console.log("📩 Generated Email:\n", applicationEmail);
+      const result = await sendEmail({
+        to: emails,
+        subject: subject as string,
+        text: mailtext as string,
+        attachments: [
+          {
+            filename: "resume.pdf",
+            path: "./src/asset/resume.pdf", // make sure the file exists
+          },
+        ],
       });
+      console.log(7);
+      console.log(result);
+      const sid = await sendWhatsAppMessage(
+        process.env.MY_WHATSAPP_NUMBER!,
+        `Email sent: ${result.response}`
+      );
+      console.log(sid);
+      console.log(8);
+      // const applicationEmail = await generateEmail(extractedText, myProfile);
+      // console.log("📩 Generated Email:\n", applicationEmail);
 
       writer.on("error", (err) => {
         console.error("❌ Error writing file:", err);
