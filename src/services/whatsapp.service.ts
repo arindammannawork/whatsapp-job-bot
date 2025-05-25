@@ -32,6 +32,7 @@ export const sendWhatsAppMessage = async (to: string, body: string) => {
 };
 
 export const handleIncomingMessage = async (req: Request, res: Response) => {
+  const host = req.hostname;
   const from = req.body.From;
   const numMedia = parseInt(req.body.NumMedia || "0", 10);
 
@@ -46,7 +47,13 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
 
     const fileExtension = mediaType.split("/")[1]; // jpeg, png, etc.
     const filename = `image_${Date.now()}.${fileExtension}`;
-    const savePath = path.join("/tmp", filename); // ✅ Use /tmp for Vercel
+    let savePath: string;
+    if (host === "localhost" || host === "127.0.0.1") {
+      savePath = path.join(__dirname, "../../uploads", filename);
+    } else {
+      // savePath = path.join("/tmp", filename); // ✅ Use /tmp for Vercel
+      savePath = path.join(__dirname, "../../uploads", filename);
+    }
     console.log(1);
 
     try {
@@ -72,40 +79,45 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
       console.log(5, "Image saved");
 
       const extractedText = await extractTextFromImage(savePath);
-      console.log(6, "Extracted Text");
+      console.log(6, "Extracted Text", extractedText);
 
       const googleAiOutput = await tryGoogleAi(
         extractedText,
         myProfile,
         extraPromt
       );
-      console.log(7, "AI Output");
+      console.log(7, "AI Output", googleAiOutput);
+      if (typeof googleAiOutput === "string") {
+        const subject = extractSubject(googleAiOutput!);
+        const mailtext = removeSubjectLine(googleAiOutput);
+        // const subject = extractSubject(googleAiOutput.text);
+        // const mailtext = removeSubjectLine(googleAiOutput.text);
 
-      const subject = extractSubject(googleAiOutput.text);
-      const mailtext = removeSubjectLine(googleAiOutput.text);
+        const emails = extractEmailFromText(`${extractedText}. ${extraPromt}`);
+        console.log("📧 Emails Found:", emails);
 
-      const emails = extractEmailFromText(`${extractedText}. ${extraPromt}`);
-      console.log("📧 Emails Found:", emails);
+        const result = await sendEmail({
+          to: emails,
+          subject: subject as string,
+          text: mailtext as string,
+          attachments: [
+            {
+              filename: "resume.pdf",
+              path: "./src/asset/resume.pdf", // ✅ Make sure this file exists at build time
+            },
+          ],
+        });
 
-      const result = await sendEmail({
-        to: emails,
-        subject: subject as string,
-        text: mailtext as string,
-        attachments: [
-          {
-            filename: "resume.pdf",
-            path: "./src/asset/resume.pdf", // ✅ Make sure this file exists at build time
-          },
-        ],
-      });
+        console.log(8, result);
 
-      console.log(8, result);
-
-      const sid = await sendWhatsAppMessage(
-        process.env.MY_WHATSAPP_NUMBER!,
-        `Email sent: ${result.response}`
-      );
-      console.log("📤 WhatsApp SID:", sid);
+        const sid = await sendWhatsAppMessage(
+          process.env.MY_WHATSAPP_NUMBER!,
+          `Email sent: ${result.response}`
+        );
+        console.log("📤 WhatsApp SID:", sid);
+      } else {
+        throw new Error("googleAiOutput is not a string");
+      }
     } catch (error: any) {
       console.error("❌ Failed:", error.message || error);
       const sid = await sendWhatsAppMessage(
