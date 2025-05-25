@@ -36,17 +36,22 @@
 //   const result = response.predictions?.[0]?.content || "No response";
 //   return result;
 // }
-import { GoogleGenAI } from "@google/genai";
+// import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({
-  apiKey: "AIzaSyBO6fNE50z-eSnemD9y2Ccag5-yG3B6hhg",
-});
+// const ai = new GoogleGenAI({
+//   apiKey: "AIzaSyBO6fNE50z-eSnemD9y2Ccag5-yG3B6hhg",
+// });
 
 export async function tryGoogleAi(
   jobDesc: string,
   userProfile: string,
   extraPromt?: string | undefined
 ) {
+  const genai = await import("@google/genai");
+  const ai = new genai.GoogleGenAI({
+    apiKey: "AIzaSyBO6fNE50z-eSnemD9y2Ccag5-yG3B6hhg",
+  });
+
   const prompt = `
   You are an assistant that writes professional job application emails.
 
