@@ -118,8 +118,9 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+  },
+  // "include": ["src", "api"]
 
 
 }
