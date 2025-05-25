@@ -47,6 +47,7 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
 
     const fileExtension = mediaType.split("/")[1]; // jpeg, png, etc.
     const filename = `image_${Date.now()}.${fileExtension}`;
+    const resumePath = path.resolve(__dirname, "asset/resume.pdf");
     let savePath: string;
     if (host === "localhost" || host === "127.0.0.1") {
       savePath = path.join(__dirname, "../../uploads", filename);
@@ -103,7 +104,7 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
           attachments: [
             {
               filename: "resume.pdf",
-              path: "./src/asset/resume.pdf", // ✅ Make sure this file exists at build time
+              path: resumePath, // ✅ Make sure this file exists at build time
             },
           ],
         });
