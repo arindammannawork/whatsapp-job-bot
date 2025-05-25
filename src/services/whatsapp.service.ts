@@ -42,8 +42,10 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
     const filename = `image_${Date.now()}.${fileExtension}`;
     // const savePath = path.join(__dirname, "../../uploads", filename);
     const savePath = path.join("/tmp", filename); // ✅ Use /tmp for Vercel
+    console.log(1);
 
     try {
+      console.log(2);
       const response = await axios.get(mediaUrl, {
         responseType: "stream",
         auth: {
@@ -51,10 +53,12 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
           password: process.env.TWILIO_AUTH_TOKEN!,
         },
       });
+      console.log(3);
 
       const writer = fs.createWriteStream(savePath);
+      console.log(4);
       response.data.pipe(writer);
-
+      console.log(5);
       writer.on("finish", async () => {
         // console.log("✅ Image saved to:", savePath);
         const extractedText = await extractTextFromImage(savePath);
@@ -64,6 +68,7 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
           myProfile,
           extraPromt
         );
+        console.log(6);
         const subject = extractSubject(googleAiOutput.text);
         const mailtext = removeSubjectLine(googleAiOutput.text);
 
@@ -81,13 +86,14 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
             },
           ],
         });
+        console.log(7);
         console.log(result);
         const sid = await sendWhatsAppMessage(
           process.env.MY_WHATSAPP_NUMBER!,
           `Email sent: ${result.response}`
         );
         console.log(sid);
-
+        console.log(8);
         // const applicationEmail = await generateEmail(extractedText, myProfile);
         // console.log("📩 Generated Email:\n", applicationEmail);
       });
