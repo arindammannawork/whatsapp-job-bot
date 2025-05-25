@@ -1,25 +1,19 @@
 import Tesseract from "tesseract.js";
+import path from "path";
 
-/**
- * Runs OCR on the given image path
- * @param imagePath - Path to the image
- * @returns Extracted full text
- */
 export const extractTextFromImage = async (
   imagePath: string
 ): Promise<string> => {
   const result = await Tesseract.recognize(imagePath, "eng", {
-    logger: (m) => console.log(m.status, m.progress), // optional logging
-  });
-
+    logger: (m: any) => console.log(m.status, m.progress),
+    corePath: path.join(
+      __dirname,
+      "../../public/tesseract/tesseract-core-simd.js"
+    ),
+    workerPath: path.join(
+      __dirname,
+      "../../public/tesseract/tesseract.worker.min.js"
+    ),
+  } as any); // bypass TS types
   return result.data.text;
-};
-
-/**
- * Extract email from plain text
- */
-export const extractEmailFromText = (text: string): string[] => {
-  const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-  const matches = text.match(emailRegex);
-  return matches || [];
 };

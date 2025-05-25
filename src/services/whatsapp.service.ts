@@ -3,10 +3,14 @@ import twilioClient from "../config/twilio";
 import axios from "axios";
 import fs from "fs";
 import path from "path";
-import { extractEmailFromText, extractTextFromImage } from "../utils/ocr.util";
+import { extractTextFromImage } from "../utils/ocr.util";
 import { myProfile } from "../asset/staticdata";
 import { tryGoogleAi } from "./gemini.service";
-import { extractSubject, removeSubjectLine } from "../utils/basic.util";
+import {
+  extractEmailFromText,
+  extractSubject,
+  removeSubjectLine,
+} from "../utils/basic.util";
 import { sendEmail } from "./email.service";
 
 export const sendWhatsAppMessage = async (to: string, body: string) => {

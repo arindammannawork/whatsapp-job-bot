@@ -11,3 +11,8 @@ export function removeSubjectLine(text: string | undefined): string | null {
   }
   return text.replace(/^Subject:.*\n?/m, "").trim();
 }
+export const extractEmailFromText = (text: string): string[] => {
+  const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  const matches = text.match(emailRegex);
+  return matches || [];
+};
