@@ -40,7 +40,8 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
     // Download image using Twilio auth
     const fileExtension = mediaType.split("/")[1]; // jpeg, png, etc.
     const filename = `image_${Date.now()}.${fileExtension}`;
-    const savePath = path.join(__dirname, "../../uploads", filename);
+    // const savePath = path.join(__dirname, "../../uploads", filename);
+    const savePath = path.join("/tmp", filename); // ✅ Use /tmp for Vercel
 
     try {
       const response = await axios.get(mediaUrl, {
@@ -81,6 +82,11 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
           ],
         });
         console.log(result);
+        const sid = await sendWhatsAppMessage(
+          process.env.MY_WHATSAPP_NUMBER!,
+          `Email sent: ${result.response}`
+        );
+        console.log(sid);
 
         // const applicationEmail = await generateEmail(extractedText, myProfile);
         // console.log("📩 Generated Email:\n", applicationEmail);
@@ -88,9 +94,15 @@ export const handleIncomingMessage = async (req: Request, res: Response) => {
 
       writer.on("error", (err) => {
         console.error("❌ Error writing file:", err);
+        throw err;
       });
     } catch (error) {
       console.error("❌ Failed to download image:", error);
+      const sid = await sendWhatsAppMessage(
+        process.env.MY_WHATSAPP_NUMBER!,
+        `Email sent: ${error}`
+      );
+      console.log(sid);
     }
   }
 
