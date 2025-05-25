@@ -53,7 +53,7 @@ import { HumanMessage } from "@langchain/core/messages";
 const chat = new ChatGoogleGenerativeAI({
   model: "gemini-2.5-flash-preview-05-20", // closest production-ready model
   // model: "gemini-2.0-flash", // closest production-ready model
-  apiKey: "AIzaSyBO6fNE50z-eSnemD9y2Ccag5-yG3B6hhg",
+  apiKey: process.env.GEMINI_API_KEY,
 });
 
 export async function tryGoogleAi(
