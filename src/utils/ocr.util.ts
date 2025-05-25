@@ -6,14 +6,10 @@ export const extractTextFromImage = async (
 ): Promise<string> => {
   const result = await Tesseract.recognize(imagePath, "eng", {
     logger: (m: any) => console.log(m.status, m.progress),
-    corePath: path.join(
-      __dirname,
-      "../../public/tesseract/tesseract-core-simd.js"
-    ),
-    workerPath: path.join(
-      __dirname,
-      "../../public/tesseract/tesseract.worker.min.js"
-    ),
+    corePath:
+      "https://cdn.jsdelivr.net/npm/tesseract.js-core@v4.0.2/tesseract-core-simd.js",
+    workerPath:
+      "https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/worker.min.js",
   } as any); // bypass TS types
   return result.data.text;
 };
