@@ -45,15 +45,17 @@
 export async function tryGoogleAi(
   jobDesc: string,
   userProfile: string,
-  extraPromt?: string | undefined
+  extraPromt?: string
 ) {
-  const genai = await import("@google/genai");
-  const ai = new genai.GoogleGenAI({
-    apiKey: "AIzaSyBO6fNE50z-eSnemD9y2Ccag5-yG3B6hhg",
-  });
+  const genaiModule = await import("@google/genai");
+  const { GoogleGenAI } = genaiModule;
+
+  const ai = new GoogleGenAI({
+    apiKey: process.env.GOOGLE_API_KEY!,
+  }); // load from .env instead of hardcoding
 
   const prompt = `
-  You are an assistant that writes professional job application emails.
+You are an assistant that writes professional job application emails.
 
 Given the job description:
 """${jobDesc}"""
@@ -63,29 +65,27 @@ And the applicant profile:
 
 Write a short, formal email applying for the job. Mention resume is attached.
 
-Use Chessy subject line and  ensure your email is not too formal.
-dont mention the advertised platform. allways try to mention person name instead of dear hiring team or hr if not abhilable in job description then you can use hr or hiring team etc
-allways mentiones some of my project live links 
+Use chessy subject line and ensure your email is not too formal.
+Don't mention the advertised platform. Always try to mention the person's name instead of "dear hiring team" or "HR"; if not available in the job description then you can use HR or hiring team etc.
+Always mention some of my project live links:
 
-https://lastasa.vercel.app
-https://visualizer-kohl.vercel.app
-https://boibondhupub.com
-https://www.autogorilla.com
-https://credo-7y6h.vercel.app
+- https://lastasa.vercel.app
+- https://visualizer-kohl.vercel.app
+- https://boibondhupub.com
+- https://www.autogorilla.com
+- https://credo-7y6h.vercel.app
 
+${extraPromt || ""}
+  `;
 
-${extraPromt}  
+  const model = ai.getGenerativeModel({ model: "gemini-pro" });
 
-`;
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-preview-05-20",
-    // model: "gemini-2.0-flash",
-    contents: prompt,
+  const result = await model.generateContent({
+    contents: [{ role: "user", parts: [{ text: prompt }] }],
   });
-  console.log(response.text);
-  // console.log(JSON.stringify(response));
-  // console.log(JSON.parse(response));
 
-  // return JSON.stringify(response) || "No response";
-  return response;
+  const response = await result.response;
+  const text = response.text(); // this works only after calling `.response`
+
+  return text;
 }
