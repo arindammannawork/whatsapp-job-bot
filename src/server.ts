@@ -4,8 +4,8 @@ import app from "./app";
 // import connectDB from "./config/db";
 // connectDB();
 const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => {
-//   console.log(`Servder is running on port ${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Servder is running on port ${PORT}`);
+});
 
-module.exports = app;
+// module.exports = app;
