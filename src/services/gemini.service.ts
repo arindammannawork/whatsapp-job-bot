@@ -2,10 +2,10 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { HumanMessage } from "@langchain/core/messages";
 
 const chat = new ChatGoogleGenerativeAI({
-  model: "gemini-2.5-flash-preview-05-20", // closest production-ready model
-  // model: "gemini-2.0-flash", // closest production-ready model
+  // model: "gemini-2.5-flash-preview-05-20", // closest production-ready model
+  model: "gemini-2.0-flash", // closest production-ready model
   apiKey: process.env.GEMINI_API_KEY,
-  baseUrl: "https://us-south1-generativelanguage.googleapis.com",
+  // baseUrl: "https://us-south1-generativelanguage.googleapis.com",
 });
 
 export async function tryGoogleAi(
