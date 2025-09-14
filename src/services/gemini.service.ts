@@ -76,7 +76,7 @@ Use Chessy subject line and ensure your email is not too formal.
 Don't mention the advertised platform. Always try to mention a person's name instead of "Dear Hiring Team" or "HR". If a name is not available in the job description, then use "HR" or "Hiring Team".
 
 Always mention some of my project live links:
-- https://lastasa.vercel.app
+
 - https://visualizer-kohl.vercel.app
 - https://boibondhupub.com
 - https://www.autogorilla.com

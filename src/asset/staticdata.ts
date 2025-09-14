@@ -9,12 +9,16 @@ Highly organized professional with a B.Sc. (Hons) in Computer Science and expert
 Skills:
 - Programming Languages: JavaScript, HTML, CSS, Python (Intermediate)
 - Web Technologies: JavaScript ES6, React, Node.js, Tailwind, Bootstrap
-- Frameworks: Express.js, Next.js (beginner), FastAPI (beginner), jQuery, React Native (beginner)
+- Frameworks: Express.js, Next.js , FastAPI (beginner), jQuery, React Native (beginner)
 - Databases: MySQL, MongoDB
 - Version Control: Git, GitHub
 - Data Structures & Algorithms: Arrays, Strings (Intermediate), Linked Lists, Graphs
 
 Professional Experience:
+- Marko & Brando (Fullstack Developer, Apr 2024 – Present)
+  Developing and maintaining a B2B e-commerce, metal industries company site, Office Booking site platform using Next.js, Node.js, Express, and MongoDB, mysql. Implemented features such as user authentication, product management, and order processing, payment gateway integration. even woring in laravel....
+  sites like: nfforging.com, markoandbrando.com, https://www.arizton.com/, https://www.focusreports.store/, https://theofficeaddress.com/, https://www.scarletsplendour.com/
+
 - Max Bridge Solution LLP (Freelancer UI/UX Developer, Mar 2024 – Jun 2024)
   Designed intuitive interfaces for Autogorilla (wholesale marketplace) and Bonbondhu (e-commerce platform).
 
